@@ -7,14 +7,46 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="app">
-    <h1>📝 My To-Do List</h1>
-    <form id="todo-form">
-      <input type="text" id="todo-input" placeholder="Add a new task..." required />
-      <button type="submit">Add</button>
-    </form>
-    <ul id="todo-list"></ul>
+  <header class ="app-header">
+    <button id="toggle-theme" class="menu-btn" aria-label="Toggle theme">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    </header>
+      <h1 class="title">ToDo-List</h1>
+
+  <div class="columns">
+    <div class="todo-section">
+      <h2>To Do list</h2>
+      <ul class="todo-items">
+        <li>
+          <input type="checkbox" id="task1" title="Mark Task 1 as completed">
+          <label for="task1">Task 1</label>
+        </li>
+        <li>
+          <input type="checkbox" id="task2" title="Mark Task 2 as completed">
+          <label for="task2">Task 2</label>
+        </li>
+        <!-- Add more tasks here -->
+      </ul>
+    </div>
+
+    <div class="side-section">
+      <div class="notes">
+        <h2>Notes</h2>
+        <textarea placeholder="Write notes here..."></textarea>
+      </div>
+
+      <div class="focus">
+        <h2>Focus</h2>
+        <textarea placeholder="Today's focus..."></textarea>
+      </div>
+
+      <div class="remember">
+        <h2>Remember</h2>
+        <textarea placeholder="Don't forget..."></textarea>
+      </div>
+    </div>
   </div>
-  <script src="script.js"></script>
-</body>
-</html>
+</div>

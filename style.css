@@ -1,60 +1,200 @@
 body {
-  font-family: Arial, sans-serif;
-  background: #f7f9fc;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding-top: 40px;
-  margin: 0;
-}
-
-.app {
   background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  width: 320px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  margin: 0;
+  padding: 40px;
+  color: #333;
 }
 
-h1 { text-align: center; }
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
 
-form {
+.title {
+  font-family: 'Pacifico', cursive;
+  font-size: 3rem;
+  color: #ff7b9c;
+  text-shadow: 2px 2px #ffe3ea;
+}
+
+
+.columns {
   display: flex;
-  margin-bottom: 20px;
+  gap: 30px;
 }
 
-input[type="text"] {
+.todo-section {
   flex: 1;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  background: #fcbec4; /* pastel pink */
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
 }
 
-button {
-  margin-left: 8px;
-  padding: 8px 12px;
-  background: #0b74de;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
+.todo-section h2 {
+  margin-top: 0;
+  text-align: center;
 }
 
-li {
+.todo-items {
+  list-style: none;
+  padding: 0;
+}
+
+.todo-items li {
   display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.todo-items input[type="checkbox"] {
+  margin-right: 10px;
+  transform: scale(1.2);
+}
+.notes::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  width: 60px;
+  height: 20px;
+  background: repeating-linear-gradient(
+      45deg,
+      #ffc0cb,
+      #ffc0cb 10px,
+      #ff9eb3 10px,
+      #ff9eb3 20px
+  );
+  transform: rotate(-6deg);
+  border-radius: 4px;
+}
+.notes {
+  position: relative;
+}
+.notes:hover,
+.focus:hover,
+.remember:hover,
+.todo-section:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+  transition: all 0.2s ease;
+}
+:root {
+  /* 🌸 Day mode (pink theme) */
+  --bg: #ffe4f0;          /* light pink background */
+  --note-bg: #ffb6c1;     /* slightly stronger pink for notes/cards */
+  --text-color: #3b3b3b;  /* dark text for contrast */
+}
+
+body.dark {
+  /* 🌌 Night mode (blue theme) */
+  --bg: #001f3f;          /* deep navy/blue background */
+  --note-bg: #1e90ff;     /* bright sky-blue for notes/cards */
+  --text-color: #f0f8ff;  /* near-white text */
+}
+
+
+
+/* Right column with stacked boxes */
+.side-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.notes, .focus, .remember {
+  background: #fff;
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.notes {
+  background: #f9b5a8; /* peach */
+}
+
+.focus {
+  background: #a8e3e0; /* pastel teal */
+}
+
+.remember {
+  background: #93a8a5; /* muted gray-green */
+  color: #fff;
+}
+
+.side-section h2 {
+  margin: 0 0 10px;
+  font-size: 1.3rem;
+}
+
+textarea {
+  width: 100%;
+  border: none;
+  resize: none;
+  min-height: 80px;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 1rem;
+  background: rgba(255,255,255,0.7);
+  outline: none;
+}
+
+textarea:focus {
+  background: #fff;
+}
+body {
+  background: linear-gradient(135deg, #fffaf0 0%, #f0f9ff 100%);
+  background-attachment: fixed;
+  font-family: 'Poppins', sans-serif;
+}
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;   /* Title left, icon right */
+  padding: 0.5rem 1rem;
+  background: var(--bg);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  background: rgba(255, 255, 255, 0.4);
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+body.dark .app-header {
+  background: rgba(20, 20, 20, 0.4);
+}
+.app-title {
+  background: linear-gradient(90deg, #ffb6c1, #87cefa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+
+/* Hamburger icon */
+.menu-btn {
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  padding: 6px 0;
-  border-bottom: 1px solid #eee;
-}
-
-li.completed span {
-  text-decoration: line-through;
-  color: #777;
-}
-
-.delete {
+  width: 25px;
+  height: 18px;
   background: none;
   border: none;
-  color: #d33;
   cursor: pointer;
+  padding: 0;
+}
+
+.menu-btn span {
+  height: 3px;
+  width: 100%;
+  background-color: var(--text-color);
+  border-radius: 2px;
+  transition: background-color 0.3s;
+}
+@media (max-width: 600px) {
+  .app-header { padding: 0.4rem 0.6rem; }
+  .app-title  { font-size: 1.2rem; }
 }

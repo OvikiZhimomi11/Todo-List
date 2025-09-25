@@ -42,6 +42,9 @@ function addTodoToDOM(todo) {
   li.append(span, delBtn);
   list.appendChild(li);
 }
+document.querySelector('#toggleTheme').addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+});
 
 function save() {
   localStorage.setItem('todos', JSON.stringify(todos));
