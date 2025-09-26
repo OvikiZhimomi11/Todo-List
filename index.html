@@ -1,65 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My To-Do List</title>
-  <link rel="stylesheet" href="style.css">
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Libraries for capture & PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    /* Simple button styling */
+    .download-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 18px;
+      background: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .download-btn:hover {
+      background: #0056b3;
+    }
+  </style>
 </head>
+
 <body>
-  <header class ="app-header">
+  <!-- Header with Theme Toggle -->
+  <header class="app-header">
     <button id="menu-btn" class="menu-btn" aria-label="Toggle theme">
-      <span></span>
-      <span></span>
-      <span></span>
-
+      <span></span><span></span><span></span>
     </button>
-    </header>
-      <h1 class="title">ToDo-List</h1>
+  </header>
 
-  <div class="columns">
+  <h1 class="title">ToDo-List</h1>
+
+  <!-- Main content area -->
+  <div class="columns" id="capture-area">
+    <!-- To Do List Section -->
     <div class="todo-section">
       <h2>To Do list</h2>
       <ul class="todo-items">
         <li>
-          <input type="checkbox" id="task1" title="Mark Task 1 as completed">
+          <input type="checkbox" id="task1" />
           <label for="task1">Task 1</label>
         </li>
         <li>
-          <input type="checkbox" id="task2" title="Mark Task 2 as completed">
+          <input type="checkbox" id="task2" />
           <label for="task2">Task 2</label>
         </li>
-        <!-- Add more tasks here -->
+        <li>
+          <input type="checkbox" id="task3" />
+          <label for="task3">Task 3</label>
+        </li>
       </ul>
     </div>
 
+    <!-- Side Notes Section -->
     <div class="side-section">
       <div class="notes">
         <h2>Notes</h2>
         <textarea placeholder="Write notes here..."></textarea>
       </div>
-
       <div class="focus">
         <h2>Focus</h2>
         <textarea placeholder="Today's focus..."></textarea>
       </div>
-
       <div class="remember">
         <h2>Remember</h2>
         <textarea placeholder="Don't forget..."></textarea>
       </div>
     </div>
   </div>
-</div>
-<!-- Download button -->
-    <button id="downloadBtn">Download List</button>
-  </div>
 
-  <!-- JS libraries -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- Download button -->
+  <button id="download-btn" class="download-btn">Download</button>
 
-  <!-- Your own script -->
-  <script src="script.js"></script>
+  <script>
+    // ---------- Theme Toggle ----------
+    const menuBtn = document.getElementById('menu-btn');
+    menuBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+    });
+
+    // ---------- Download Button ----------
+    const downloadBtn = document.getElementById('download-btn');
+    downloadBtn.addEventListener('click', async () => {
+      const choice = prompt("Choose format to download: Type 'png' or 'pdf'", "png");
+      if (!choice) return;
+
+      const captureElement = document.getElementById('capture-area');
+      const canvas = await html2canvas(captureElement, { scale: 2 });
+      const imgData = canvas.toDataURL('image/png');
+
+      if (choice.toLowerCase() === 'png') {
+        // Download as PNG
+        const link = document.createElement('a');
+        link.href = imgData;
+        link.download = 'todo-list.png';
+        link.click();
+      } else if (choice.toLowerCase() === 'pdf') {
+        // Download as PDF
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'pt', 'a4');
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save('todo-list.pdf');
+      } else {
+        alert("Invalid choice! Please type 'png' or 'pdf'.");
+      }
+    });
+
+    // ---------- LocalStorage Handling ----------
+    function saveTodoData() {
+      const todos = [];
+      document.querySelectorAll('.todo-items li').forEach(li => {
+        const checkbox = li.querySelector('input[type="checkbox"]');
+        const label = li.querySelector('label').innerText;
+        todos.push({ task: label, checked: checkbox.checked });
+      });
+
+      const notes = {
+        notes: document.querySelector('.notes textarea').value,
+        focus: document.querySelector('.focus textarea').value,
+        remember: document.querySelector('.remember textarea').value,
+      };
+
+      localStorage.setItem('todoData', JSON.stringify({ todos, notes }));
+    }
+
+    function loadTodoData() {
+      const saved = JSON.parse(localStorage.getItem('todoData'));
+      if (!saved) return;
+
+      saved.todos.forEach((item, index) => {
+        const li = document.querySelectorAll('.todo-items li')[index];
+        if (li) li.querySelector('input[type="checkbox"]').checked = item.checked;
+      });
+
+      if (saved.notes) {
+        document.querySelector('.notes textarea').value = saved.notes.notes || '';
+        document.querySelector('.focus textarea').value = saved.notes.focus || '';
+        document.querySelector('.remember textarea').value = saved.notes.remember || '';
+      }
+    }
+
+    // Save on change
+    document.querySelectorAll('input[type="checkbox"], textarea').forEach(el => {
+      el.addEventListener('input', saveTodoData);
+      el.addEventListener('change', saveTodoData);
+    });
+
+    // Load data on start
+    loadTodoData();
+  </script>
 </body>
 </html>
