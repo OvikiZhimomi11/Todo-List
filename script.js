@@ -49,8 +49,32 @@ document.querySelector('#toggleTheme').addEventListener('click', () => {
 function save() {
   localStorage.setItem('todos', JSON.stringify(todos));
 }
-const btn = document.getElementById('menu-btn');
-btn.addEventListener('click', () => {
-  btn.classList.toggle('active');
-  document.getElementById('menu').classList.toggle('dark');
+// Toggle dark mode + animate hamburger
+const menuBtn = document.getElementById('menu-btn');
+menuBtn.addEventListener('click', () => {
+  menuBtn.classList.toggle('active');
+  document.body.classList.toggle('dark');
+});
+
+// Capture and download
+const dlBtn = document.getElementById('downloadBtn');
+dlBtn.addEventListener('click', async () => {
+  const area = document.querySelector('.container'); // capture whole app
+
+  const canvas = await html2canvas(area, { scale: 2 });
+  const imgData = canvas.toDataURL('image/png');
+
+  // Save as PNG
+  const link = document.createElement('a');
+  link.href = imgData;
+  link.download = 'todo-list.png';
+  link.click();
+
+  // Optional PDF
+  // const { jsPDF } = window.jspdf;
+  // const pdf = new jsPDF('p', 'mm', 'a4');
+  // const imgWidth = 210;
+  // const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  // pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+  // pdf.save('todo-list.pdf');
 });

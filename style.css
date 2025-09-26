@@ -213,6 +213,19 @@ body.dark {
   transform: translateY(-8px) rotate(-45deg);
 }
 
+#downloadBtn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  background: #ff7b9c;
+  color: white;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+#downloadBtn:hover {
+  background: #ff4b78;
+}
 
 @media (max-width: 600px) {
   .app-header { padding: 0.4rem 0.6rem; }
