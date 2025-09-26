@@ -49,3 +49,8 @@ document.querySelector('#toggleTheme').addEventListener('click', () => {
 function save() {
   localStorage.setItem('todos', JSON.stringify(todos));
 }
+const btn = document.getElementById('menu-btn');
+btn.addEventListener('click', () => {
+  btn.classList.toggle('active');
+  document.getElementById('menu').classList.toggle('dark');
+});
